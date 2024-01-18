@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
             },
             {
                 name: 'Version', // Field name
-                value: '1.0.0', // Field value (Replace with your bot's version)
+                value: '2.6.3', // Field value (Replace with your bot's version)
                 inline: true, // Set to inline for side-by-side display
             },
             {
