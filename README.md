@@ -25,7 +25,7 @@ A Discord bot with backup functionality using discord-backup.
 
 ## Setup 📐
 
-1. Remove the `.example` from the `config.json.example` file. The fill in the necessary information (token, prefix, etc.).
+1. Remove the `.example` from the `config.json.example` file. Then fill in the necessary information (token, prefix, etc.).
 2. Start the bot: `npm start`
 
 ## Command Usage 🤖
