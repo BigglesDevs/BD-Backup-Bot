@@ -4,7 +4,7 @@
 
 <p align="center">
 ## Invite the Bot 🚀
-[Invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=1153748095679602768&permissions=8&scope=bot)
+  [Invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=1153748095679602768&permissions=8&scope=bot)
 </p>
 
 [![Node.js](https://img.shields.io/badge/Node.js-latest-brightgreen)](https://nodejs.org/)
