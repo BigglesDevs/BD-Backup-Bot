@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="YOUR_BOT_INVITE_LINK">
+  <a href="https://discord.com/api/oauth2/authorize?client_id=1153748095679602768&permissions=8&scope=bot">
   <img src="https://cdn.discordapp.com/attachments/1171503036800184362/1197476836247080980/Untitled-1.png?ex=65bb6835&is=65a8f335&hm=56a57384eb200fc9bf3fc3f1006173566b09d09607cf5eaad80e0a16cdbfce71&" alt="Discord Backup Bot" width="300"/>
   </a>
 </p>
