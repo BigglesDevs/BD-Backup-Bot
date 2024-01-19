@@ -2,6 +2,11 @@
   <img src="https://cdn.discordapp.com/attachments/1171503036800184362/1197476836247080980/Untitled-1.png?ex=65bb6835&is=65a8f335&hm=56a57384eb200fc9bf3fc3f1006173566b09d09607cf5eaad80e0a16cdbfce71&" alt="Discord Backup Bot" width="300"/>
 </p>
 
+<p align="center">
+## Invite the Bot 🚀
+[Invite the bot to your server](https://discord.com/api/oauth2/authorize?client_id=1153748095679602768&permissions=8&scope=bot)
+</p>
+
 [![Node.js](https://img.shields.io/badge/Node.js-latest-brightgreen)](https://nodejs.org/)
 [![ECMAScript Version](https://img.shields.io/badge/ECMAScript-2023-yellow)](https://www.ecma-international.org/ecma-262/12.0/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
