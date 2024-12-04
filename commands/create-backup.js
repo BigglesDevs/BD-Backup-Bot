@@ -1,29 +1,39 @@
-// Import the 'discord-backup' library and the bot configuration
+const { MessageEmbed } = require('discord.js');
 const backup = require('discord-backup');
 const config = require('../config.json');
 
-// Define the command
 exports.run = async (client, message, args) => {
-
-    // Check if the member has the 'MANAGE_MESSAGES' permission
-    if (!message.member.hasPermission('MANAGE_MESSAGES')) {
-        return message.channel.send(':x: You need to have the manage messages permissions to create a backup in this server.');
-    }
-
-    // Inform that the backup creation process is starting
-    message.channel.send('Creating backup, please wait...');
-
-    // Create a backup of the current guild (server)
     backup.create(message.guild).then((backupData) => {
-
-        // Send a success message with the backup ID and instructions
-        return message.channel.send(`Backup created! Here is your ID: \`${backupData.id}\`! Use \`${config.prefix}load-backup ${backupData.id}\` to load the backup on another server!`);
+        const embed = {
+            color: 0x2ECC71,
+            title: '🔧 **Backup Created!**',
+            description: 'Your backup has been successfully created! Here are the details:',
+            fields: [
+                {
+                    name: '🆔 **Backup ID**',
+                    value: `\`${backupData.id}\``,
+                    inline: true,
+                },
+                {
+                    name: '📥 **Load Backup**',
+                    value: `Use \`bd!load-backup ${backupData.id}\` to load this backup on another server!`,
+                    inline: false,
+                },
+            ],
+            footer: {
+                text: 'Backup System | Created by BigglesDevelopment 💖',
+            },
+            timestamp: new Date(),
+        };
+        
+        return message.channel.send({ embed: embed });
 
     }).catch(() => {
+        const errorEmbed = {
+            color: 0xFF0000, // Red color for error
+            description: ':x: An error occurred while creating the backup. Please check if the bot has the necessary permissions!',
+        };
 
-        // Handle errors during the backup creation process
-        return message.channel.send(':x: An error occurred, please check if the bot is an administrator!');
-
+        return message.channel.send({ embed: errorEmbed });
     });
-
 };

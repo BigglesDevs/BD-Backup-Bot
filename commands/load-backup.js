@@ -1,69 +1,74 @@
-// Import the 'discord-backup' library
 const backup = require('discord-backup');
 
-// Define the command
 exports.run = async (client, message, args) => {
-    // Check if the member has the 'ADMINISTRATOR' permission
     if (!message.member.hasPermission('ADMINISTRATOR')) {
-        return message.channel.send(':x: You need to have the manage messages permissions to create a backup in this server.');
+        return message.channel.send({
+            embed: {
+                color: 0xFF0000,
+                description: ':x: You need to have the **ADMINISTRATOR** permission to load a backup!',
+            },
+        });
     }
 
-    // Extract the backup ID from the command arguments
     const backupID = args.join(' ');
-
-    // Fetch the backup with the provided ID
     backup.fetch(backupID).then(() => {
-
-        // Prompt the user for confirmation
-        message.channel.send(':warning: All the server channels, roles, and settings will be cleared. Do you want to continue? Send `-confirm` or `cancel`!');
-
-        // Create a message collector to await user confirmation
+        const confirmEmbed = {
+            color: 0xFFCC00,
+            description: ':warning: All server channels, roles, and settings will be cleared. Do you want to continue? Send `-confirm` or `cancel`!',
+        };
+        message.channel.send({ embed: confirmEmbed });
         const collector = message.channel.createMessageCollector((m) => m.author.id === message.author.id && ['-confirm', 'cancel'].includes(m.content), {
-            time: 60000,  // Set a timeout of 60 seconds
-            max: 1  // Allow only one response
+            time: 60000,
+            max: 1,
         });
 
-        // Handle collected messages
         collector.on('collect', (m) => {
             const confirm = m.content === '-confirm';
             collector.stop();
+            
             if (confirm) {
-
-                // Inform that the backup loading process is starting
-                message.channel.send('Loading backup, please wait...');
-
-                // Load the backup into the server
+                const loadingEmbed = {
+                    color: 0x3498db,
+                    description: '🔄 Loading backup, please wait...',
+                };
+                message.channel.send({ embed: loadingEmbed });
                 backup.load(backupID, message.guild).then(() => {
-
-                    // Notify the user about the successful backup load
-                    message.channel.send(':white_check_mark: Backup loaded successfully!');
+                    const successEmbed = {
+                        color: 0x2ECC71,
+                        description: ':white_check_mark: **Backup loaded successfully!**',
+                    };
+                    message.channel.send({ embed: successEmbed });
                     return message.author.send('Backup loaded successfully!');
-            
                 }).catch((err) => {
-            
-                    // Handle errors during backup loading
-                    if (err === 'No backup found')
-                        return message.channel.send(':x: No backup found for ID ' + backupID + '!');
-                    else
-                        return message.author.send(':x: An error occurred: ' + (typeof err === 'string') ? err : JSON.stringify(err));
-            
+                    const errorEmbed = {
+                        color: 0xFF0000,
+                        description: `:x: An error occurred: ${typeof err === 'string' ? err : JSON.stringify(err)}`,
+                    };
+                    return message.channel.send({ embed: errorEmbed });
                 });
-
             } else {
-                // Notify the user about the cancellation
-                return message.channel.send(':x: Cancelled.');
+                const cancelledEmbed = {
+                    color: 0xFF0000,
+                    description: ':x: **Cancelled.**',
+                };
+                return message.channel.send({ embed: cancelledEmbed });
             }
         });
 
-        // Handle the end of the message collector
         collector.on('end', (collected, reason) => {
-            if (reason === 'time')
-                return message.channel.send(':x: Command timed out! Please retry.');
+            if (reason === 'time') {
+                const timeoutEmbed = {
+                    color: 0xFF0000,
+                    description: ':x: **Command timed out!** Please retry.',
+                };
+                return message.channel.send({ embed: timeoutEmbed });
+            }
         });
-
     }).catch(() => {
-        // Notify the user if no backup is found for the provided ID
-        return message.channel.send(':x: No backup found for ID ' + backupID + '!');
+        const noBackupEmbed = {
+            color: 0xFF0000,
+            description: ':x: No backup found for ID `' + backupID + '`!',
+        };
+        return message.channel.send({ embed: noBackupEmbed });
     });
-
 };

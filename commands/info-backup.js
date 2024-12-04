@@ -1,49 +1,65 @@
-// Import the necessary Discord.js and discord-backup libraries
-const Discord = require('discord.js');
 const backup = require('discord-backup');
 
-// Define the command
 exports.run = async (client, message, args) => {
-
-    // Check if the member has the 'MANAGE_MESSAGES' permission
-    if (!message.member.hasPermission('MANAGE_MESSAGES')) {
-        return message.channel.send(':x: You need to have the manage messages permissions to create a backup in this server.');
+    const backupID = args.join(' ');
+    if (!backupID) {
+        return message.channel.send(':x: Please specify a valid backup ID!');
     }
 
-    // Extract the backup ID from the command arguments
-    const backupID = args.join(' ');
-
-    // Check if a valid backup ID is provided
-    if (!backupID)
-        return message.channel.send(':x: Please specify a valid backup ID!');
-
-    // Fetch the backup with the provided ID
-    backup.fetch(backupID).then((backup) => {
-
-        // Extract and format the creation date of the backup
-        const date = new Date(backup.data.createdTimestamp);
-        const yyyy = date.getFullYear().toString(), mm = (date.getMonth() + 1).toString(), dd = date.getDate().toString();
+    backup.fetch(backupID).then((backupData) => {
+        const date = new Date(backupData.data.createdTimestamp);
+        const yyyy = date.getFullYear().toString(),
+              mm = (date.getMonth() + 1).toString(),
+              dd = date.getDate().toString();
         const formattedDate = `${yyyy}/${(mm[1] ? mm : "0" + mm[0])}/${(dd[1] ? dd : "0" + dd[0])}`;
 
-        // Create an embed to display backup information
-        const embed = new Discord.MessageEmbed()
-            .setAuthor('ℹ️ Backup', backup.data.iconURL)
-            .addField('Server name', backup.data.name)
-            .addField('Size', backup.size + ' kb')
-            .addField('Created at', formattedDate)
-            .setFooter('Backup ID: ' + backup.id);
+        const embed = {
+            color: 0x3498db, // Blue color for info
+            title: 'ℹ️ **Backup Information**',
+            description: `Here is the information for the backup with ID: \`${backupID}\``,
+            thumbnail: {
+                url: backupData.data.iconURL,
+            },
+            fields: [
+                {
+                    name: '🔹 **Server Name**',
+                    value: backupData.data.name,
+                    inline: true,
+                },
+                {
+                    name: '🔹 **Size**',
+                    value: `${backupData.size} KB`,
+                    inline: true,
+                },
+                {
+                    name: '🔹 **Created At**',
+                    value: formattedDate,
+                    inline: true,
+                },
+                {
+                    name: '🔹 **Channels**',
+                    value: `${backupData.data.channels.length}`,
+                    inline: true,
+                },
+                {
+                    name: '🔹 **Members**',
+                    value: `${backupData.data.members.length}`,
+                    inline: true,
+                },
+            ],
+            footer: {
+                text: `Backup ID: ${backupData.id} | Created by BigglesDevelopment 💖`,
+            },
+            timestamp: new Date(),
+        };
 
-        // Send the embed to the channel
-        return message.channel.send(embed);
+        return message.channel.send({ embed: embed });
 
-    }).catch((err) => {
-
-        // Handle errors during the backup fetching process
-        if (err === 'No backup found')
-            return message.channel.send(':x: No backup found for ID ' + backupID + '!');
-        else
-            return message.channel.send(':x: An error occurred: ' + (typeof err === 'string') ? err : JSON.stringify(err));
-
+    }).catch(() => {
+        const errorEmbed = {
+            color: 0xFF0000, // Red for errors
+            description: ':x: No backup found for the ID `' + backupID + '`!',
+        };
+        return message.channel.send({ embed: errorEmbed });
     });
-
 };

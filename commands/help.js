@@ -1,37 +1,64 @@
-// Define the command
+const { MessageEmbed } = require('discord.js');
+
 exports.run = async (client, message, args) => {
-    // Create an embed for the help command
     const helpEmbed = {
-        color: 0x3498db, // Set the embed color
-        title: 'Backup Command Help', // Set the title of the embed
-        description: 'Create and load server backups with this command.', // Set the main description of the embed
+        color: 0x3498db,
+        title: '🔧 BD-Backupbot Commands Help',
+        description: 'Create and load server backups with these commands.',
         fields: [
             {
-                name: 'Create Backup', // Field name
-                value: '`b!create-backup` - Creates a backup of the server.', // Field value
+                name: '__📝 Create Backup__',
+                value: '`bd!create-backup` - Creates a backup of the server.',
             },
             {
-                name: 'Load Backup', // Field name
-                value: '`b!load-backup [backupID]` - Loads a server backup using the provided backup ID.', // Field value
+                name: '__🔄 Load Backup__',
+                value: '`bd!load-backup [backupID]` - Loads a server backup using the provided backup ID.',
             },
             {
-                name: 'Backup Info ', // Field name (note the extra space for formatting)
-                value: '`b!info-backup [backupID]` - Shows information of a backup', // Field value
+                name: '__ℹ️ Backup Info__',
+                value: '`bd!info-backup [backupID]` - Shows information of a backup.',
             },
             {
-                name: 'Bot information', // Field name (note the extra space for formatting)
-                value: '`b!bot-info` - Shows information of a backup', // Field value
+                name: '__🤖 Bot Information__',
+                value: '`bd!bot-info` - Shows information about the bot.',
             },
             {
-                name: 'Command Usage', // Field name
-                value: 'Make sure to have `ADMINISTRATOR` permissions to use these commands.', // Field value
+                name: '__⚠️ Command Usage__',
+                value: 'Make sure to have `ADMINISTRATOR` permissions to use these commands.',
             },
         ],
         footer: {
-            text: 'Bot created by BigglesDevelopment', // Set the footer text
+            text: 'Developed by BigglesDevelopment 💖',
         },
     };
 
-    // Send the help embed to the channel
     message.channel.send({ embed: helpEmbed });
+
+    if (args[0] === 'ownercommandhelp') {
+        if (message.author.id === '676354368404193280') {
+            const ownerHelpEmbed = {
+                color: 0xFF5733,
+                title: '🔒 Owner-Only Commands Help',
+                description: 'These commands are exclusive to the bot owner.',
+                fields: [
+                    {
+                        name: '__🛠️ Owner Command 1__',
+                        value: '`bd!leave-servers` - Example command for the owner.',
+                    },
+                ],
+                footer: {
+                    text: 'Only available to the bot owner 💖',
+                },
+            };
+
+            try {
+                await message.author.send({ embed: ownerHelpEmbed });
+                message.channel.send(':white_check_mark: I have sent the owner commands help to your DMs!');
+            } catch (error) {
+                message.channel.send(':x: I was unable to send you a DM. Please make sure your DMs are open.');
+            }
+        } else {
+            message.channel.send(':x: You are not authorized to view the owner commands!');
+        }
+    }
 };
